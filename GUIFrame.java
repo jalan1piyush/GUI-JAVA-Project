@@ -1,30 +1,27 @@
 import java.awt.*;
 import java.awt.event.*;
-import javax.swing.*;
 import java.sql.*;
-import java.util.ArrayList;
+import javax.swing.*;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 
-public class GUIFrame extends JFrame implements ActionListener {
+public class GUIFrame extends JFrame implements ActionListener, MenuListener {
 	
 	private static final long serialVersionUID = 1L;
-	public Drawing draw;
-	public JFrame pane;
-	public String Mode;
-	public JMenu file, create, edit;
-	public JPanel Drawing;
-	public JMenuItem point, line, sel, move, delete, open, save, saveas;
-	public MouseListener offclick;
-        
-        //  Database credentials
-        static final String USER = "root";
-        static final String PASS = "0000";
+	static Drawing draw;
+	private String Mode;
+	public static String url, dbName, driver, userName, password;
+	public static Statement statement;
+	public static Connection conn;
+	private JMenu file, create, edit;
+	private JMenuItem point, line, sel, move, delete, open, save, saveas;
 
 	public GUIFrame(){
 		super("Interface Frame");
-
+		
 		draw = new Drawing();
 		draw.set(Mode);
-		//addMouseListener((java.awt.event.MouseListener) this);
+		//addMouseListener((MouseListener) this);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		JMenuBar menu = Menu();
 		add(menu, BorderLayout.NORTH);
@@ -51,8 +48,6 @@ public class GUIFrame extends JFrame implements ActionListener {
       	KeyStroke ctm = KeyStroke.getKeyStroke(KeyEvent.VK_M, InputEvent.CTRL_MASK);
     	move.setAccelerator(ctm);
       delete = new JMenuItem ("Delete Object");
-      	//KeyStroke del = KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0);
-      	//delete.setAccelerator(del);
       open = new JMenuItem("Open");
       	KeyStroke opn = KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK);
       	open.setAccelerator(opn);
@@ -92,23 +87,39 @@ public class GUIFrame extends JFrame implements ActionListener {
       Menu.add(file);
       Menu.add(create);
       Menu.add(edit);
+    
       return Menu;
 	}
-	//public class as {
-		public void mousePressed(MouseEvent e){
-			draw.DrawShapes(getGraphics());
-		}
-	//}
+	
+	  public void menuSelected(MenuEvent e) {
+	      JMenu file = (JMenu) e.getSource();
+	      System.out.println("Menu Selected: "+file.getText());
+	   }
+	   public void menuDeselected(MenuEvent e) {
+		   JMenu file = (JMenu) e.getSource();
+		   System.out.println("Menu Selected: "+file.getText());
+	   }
+	   public void menuCanceled(MenuEvent e) {
+		   JMenu file = (JMenu) e.getSource();
+		   System.out.println("Menu Selected: "+file.getText());  
+	   }
+			
+	
 	public void actionPerformed(ActionEvent e) {
 		String cmd = e.getActionCommand();
 		if (cmd.equals("open")){
 			draw.set("open");
+			draw.Open();
 		}
 		if (cmd.equals("save")){
-			draw.Save();
+			if(draw.sfile !=""){
+			draw.Save(false);
+			} else {
+				draw.Save(true);
+			}
 		}
 		if (cmd.equals("saveas")){
-			draw.set("saveas");
+			draw.Save(false);
 		}
 	    if (cmd.equals("point")){
 	    	draw.set("point");
@@ -123,10 +134,10 @@ public class GUIFrame extends JFrame implements ActionListener {
 	    	draw.set("move");
 	    }
 	    if (cmd.equals("delete")){
+	    	System.out.println("test");
 	    	draw.DrawDel(draw.selection);
 	    }
-    }	
-        
+	}		
 
 	public static void main (String[] args) {
 		 GUIFrame mainwindow = new GUIFrame();
@@ -134,9 +145,7 @@ public class GUIFrame extends JFrame implements ActionListener {
 		 mainwindow.setLocation(400,100); 
 		 mainwindow.setVisible(true);
                  
-                 
-                                  
-                 Connection conn = null;
+                                  Connection conn = null;
                  Statement stmt = null;
                  try{
                      
@@ -144,6 +153,9 @@ public class GUIFrame extends JFrame implements ActionListener {
                      
                 String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
                 String DB_URL = "jdbc:mysql://localhost/";
+                String USER = "root";
+                String PASS = "0000";
+
                 
                  //STEP 2: Register JDBC driver
                  Class.forName("com.mysql.jdbc.Driver");
@@ -176,7 +188,7 @@ public class GUIFrame extends JFrame implements ActionListener {
                 stmt = conn.createStatement();
                  String sql4 = "CREATE TABLE COORDINATES " +
                       "(ID INTEGER not NULL, " +
-                        " LOP INTEGER, " + 
+                        " LOP DOUBLE, " + 
                         " STARTX DOUBLE, " + 
                         " STARTY DOUBLE, " + 
                         " ENDX DOUBLE, " + 
@@ -209,6 +221,8 @@ public class GUIFrame extends JFrame implements ActionListener {
                        se.printStackTrace();
                     }//end finally try
                   }//end try
-            System.out.println("Goodbye!");
+            System.out.println("Goodbye! database and table created");
+                      
 	}//end main
+
 }
