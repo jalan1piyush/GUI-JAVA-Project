@@ -13,7 +13,13 @@ public class Updatenow {
 	private static String userName = "root"; 
 	private static String password = "0000";
 
-//
+//Save details to MySQL Database and then to CSV
+	/**
+	 * Class created to save details like coordinates, geometry type and index to first database and then export it to CSV
+	 * @param x
+	 * @param sfile
+	 * 
+	 */
 	public static void Save(ArrayList<ArrayList<Double>> x, String sfile) {
 		int n = x.get(0).size();
 		System.out.println(sfile);
@@ -28,9 +34,9 @@ public class Updatenow {
 				out.setInt(1, i+1);
 				out.setDouble(2, x.get(1).get(i));
 				out.setDouble(3, x.get(2).get(i));
-                                out.setDouble(4, x.get(3).get(i));
+                out.setDouble(4, x.get(3).get(i));
 				out.setDouble(5, x.get(4).get(i));
-                                out.setDouble(6, x.get(5).get(i));
+                out.setDouble(6, x.get(5).get(i));
 				out.execute();
 			}
 			String save = ("SELECT ID,LOP,STARTX,STARTY,ENDX,ENDY FROM LANDP.COORDINATES INTO OUTFILE '"+sfile+".csv' FIELDS TERMINATED BY ',' ENCLOSED BY '\"' LINES TERMINATED BY '\n'");
@@ -42,6 +48,10 @@ public class Updatenow {
 	}
 
 //Open file to MySQL Database and then to CSV
+	/**
+	 * Class created to enter details like coordinates, geometry type and index from selected CSV to first database and then display it on screen
+	 * @param ofile
+	 */
 	public static void Open (String ofile) {
 		ArrayList<ArrayList<Double>> In = new ArrayList<ArrayList<Double>>();
 		ArrayList<Double> Insp = new ArrayList<Double>();
@@ -60,12 +70,12 @@ public class Updatenow {
 			ResultSet result = sql.executeQuery(in);
 			while (result.next()){
 				In.get(0).add((double) result.getInt("ID")-1);
-				In.get(1).add((double) result.getDouble("LOP"));
-				In.get(2).add((double) result.getDouble("STARTX"));
-                                In.get(3).add((double) result.getDouble("STARTY"));
-                                In.get(4).add((double) result.getDouble("ENDX"));
-                                In.get(5).add((double) result.getDouble("ENDY"));
-                                
+				In.get(1).add(result.getDouble("LOP"));
+				In.get(2).add(result.getDouble("STARTX"));
+                In.get(3).add(result.getDouble("STARTY"));
+                In.get(4).add(result.getDouble("ENDX"));
+                In.get(5).add(result.getDouble("ENDY"));
+                
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
