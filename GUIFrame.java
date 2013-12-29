@@ -5,6 +5,10 @@ import javax.swing.*;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
+/**
+ * 
+ * GUIFrame is a class used to create a frame where draw panel and the menu are displayed
+ */
 public class GUIFrame extends JFrame implements ActionListener, MenuListener {
 	
 	private static final long serialVersionUID = 1L;
@@ -16,6 +20,9 @@ public class GUIFrame extends JFrame implements ActionListener, MenuListener {
 	private JMenu file, create, edit;
 	private JMenuItem point, line, sel, move, delete, open, save, saveas;
 
+	/**
+	 * constructor of class GUIFrame
+	 */
 	public GUIFrame(){
 		super("Interface Frame");
 		
@@ -28,6 +35,11 @@ public class GUIFrame extends JFrame implements ActionListener, MenuListener {
 		add(draw);
 	}
 
+	
+	
+	/**
+	 * A method that returns aa menubar
+	 */
 	public JMenuBar Menu() {
 	  JMenuBar Menu = new JMenuBar();
 	  
@@ -139,17 +151,18 @@ public class GUIFrame extends JFrame implements ActionListener, MenuListener {
 	    }
 	}		
 
+
 	public static void main (String[] args) {
 		 GUIFrame mainwindow = new GUIFrame();
 		 mainwindow.setSize(600,550); 
 		 mainwindow.setLocation(400,100); 
 		 mainwindow.setVisible(true);
                  
-                                  Connection conn = null;
+                 Connection conn = null;
                  Statement stmt = null;
                  try{
                      
-                 // JDBC driver name and database URL
+                 //STEP 1:JDBC driver name and database URL
                      
                 String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
                 String DB_URL = "jdbc:mysql://localhost/";
@@ -158,7 +171,7 @@ public class GUIFrame extends JFrame implements ActionListener, MenuListener {
 
                 
                  //STEP 2: Register JDBC driver
-                 Class.forName("com.mysql.jdbc.Driver");
+                 Class.forName(JDBC_DRIVER);
 
                  //STEP 3: Open a connection
                  System.out.println("Connecting to database...");
@@ -169,24 +182,23 @@ public class GUIFrame extends JFrame implements ActionListener, MenuListener {
                  stmt = conn.createStatement();
                  
                  //STEP 5: Creating a database
-                 String sql1 = "CREATE DATABASE IF NOT EXISTS LANDP";
-                 stmt.executeUpdate(sql1);
+                 String sql = "CREATE DATABASE IF NOT EXISTS LANDP";
+                 stmt.executeUpdate(sql);
                  System.out.println("Database created successfully...");
-                 
+                 //STEP 6: updating database URL
                  DB_URL = "jdbc:mysql://localhost/LANDP";
-                //STEP 3: Open a connection
-                System.out.println("Connecting to a selected database...");
-                conn = DriverManager.getConnection(DB_URL, USER, PASS);
-                System.out.println("Connected database successfully...");
+                 System.out.println("Connecting to a selected database...");
+                 conn = DriverManager.getConnection(DB_URL, USER, PASS);
+                 System.out.println("Connected database successfully...");
       
-                //STEP 4: Execute a query
-                System.out.println("Dropping table in given database...");
-                stmt = conn.createStatement();
-                stmt.executeUpdate("DROP TABLE IF EXISTS COORDINATES");
+                 
+                 System.out.println("Dropping table in given database if it exists...");
+                 stmt = conn.createStatement();
+                 stmt.executeUpdate("DROP TABLE IF EXISTS COORDINATES");
                      
-                System.out.println("Creating table in given database...");
-                stmt = conn.createStatement();
-                 String sql4 = "CREATE TABLE COORDINATES " +
+                 System.out.println("Creating table in given database...");
+                 stmt = conn.createStatement();
+                 sql = "CREATE TABLE COORDINATES " +
                       "(ID INTEGER not NULL, " +
                         " LOP DOUBLE, " + 
                         " STARTX DOUBLE, " + 
@@ -195,7 +207,7 @@ public class GUIFrame extends JFrame implements ActionListener, MenuListener {
                         " ENDY DOUBLE, " +
                         " PRIMARY KEY (ID))"; 
 
-                    stmt.executeUpdate(sql4);
+                    stmt.executeUpdate(sql);
                     System.out.println("Created table in given database...");
                
                  }
