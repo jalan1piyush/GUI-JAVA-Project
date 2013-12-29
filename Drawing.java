@@ -8,6 +8,10 @@ import java.awt.geom.*;
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ * class used to create a drawing panel where we display our graphics required for the project
+ *
+ */
 public class Drawing extends JPanel implements MouseListener, MouseMotionListener, KeyListener{
 		
 	private static final long serialVersionUID = 1L;
@@ -29,6 +33,9 @@ public class Drawing extends JPanel implements MouseListener, MouseMotionListene
 	
 	// Create drawing surface and introduce Mouse Listeners 
 	// for motion and click events
+	/**
+	 * Constructor for the class Drawing 
+	 */
 	public Drawing() {
 		setDoubleBuffered(true);
 		selection = new ArrayList<Integer>();
@@ -69,7 +76,7 @@ public class Drawing extends JPanel implements MouseListener, MouseMotionListene
 		paint(g);
 		Graphics2D shape = (Graphics2D) g;
 		for (int i = 0; i < coords.size(); i++){
-			// Interuption to not draw items being moved
+			// Interruption to not draw items being moved
 			if (Mode == "move" && selection.size()>0 && selection.contains(i)){ }
 			else{
 				if (coords.get(i).getClass().equals(Ellipse2D.Double.class)) {
@@ -125,9 +132,9 @@ public class Drawing extends JPanel implements MouseListener, MouseMotionListene
 		shape.setStroke(new BasicStroke(3));
 		x = Math.min(x1, x2);  
 		y = Math.min(y1, y2);
-		int abx = Math.abs(x1 - x2);  int aby = Math.abs(y1 - y2);
+		int abx = Math.abs(x1 - x2);  
+		int aby = Math.abs(y1 - y2);
 		r1 = new Rectangle2D.Double(x, y, abx, aby);
-		
 		if(x1<x2){
 			shape.setColor(blue);
 		} else {
@@ -232,8 +239,8 @@ public class Drawing extends JPanel implements MouseListener, MouseMotionListene
 			JFileChooser saveFile = new JFileChooser();
 			saveFile.setMultiSelectionEnabled(false);
 			saveFile.setFileFilter(new FileNameExtensionFilter("csv", "CSV Format"));
-                        saveFile.setDialogTitle("Save");
-                        saveFile.setApproveButtonText("Save");
+            saveFile.setDialogTitle("Save");
+            saveFile.setApproveButtonText("Save");
         	saveFile.showOpenDialog(null);
         	String file = saveFile.getSelectedFile().getAbsolutePath();
         	sfile = file.replace("\\", "/");
@@ -250,16 +257,15 @@ public class Drawing extends JPanel implements MouseListener, MouseMotionListene
 	
 	// Open CSV file and Import from Database
 	public void Open(){
-
 		
-		JFileChooser openFile = new JFileChooser();
+			JFileChooser openFile = new JFileChooser();
         	openFile.showOpenDialog(null);
         	String ofile = openFile.getSelectedFile().getAbsolutePath();
-                ofile = ofile.replace("\\", "/");
+            ofile = ofile.replace("\\", "/");
         	System.out.println(ofile);
         	//sfile = file;
-                Updatenow.Open(ofile);
-		DrawShapes(getGraphics());
+            Updatenow.Open(ofile);
+            DrawShapes(getGraphics());
 		
 	}
 	
