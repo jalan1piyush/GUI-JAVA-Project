@@ -18,7 +18,7 @@ public class GUIFrame extends JFrame implements ActionListener, MenuListener {
 	public static Statement statement;
 	public static Connection conn;
 	private JMenu file, create, edit;
-	private JMenuItem point, line, sel, move, delete, open, save, saveas;
+	private JMenuItem point, line, sel, move, delete, open, save, saveas, clearscreen;
 
 	/**
 	 * constructor of class GUIFrame
@@ -38,7 +38,7 @@ public class GUIFrame extends JFrame implements ActionListener, MenuListener {
 	
 	
 	/**
-	 * A method that returns aa menubar
+	 * A method that returns a menubar
 	 */
 	public JMenuBar Menu() {
 	  JMenuBar Menu = new JMenuBar();
@@ -67,7 +67,7 @@ public class GUIFrame extends JFrame implements ActionListener, MenuListener {
       	KeyStroke sve = KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK);
   		save.setAccelerator(sve);
       saveas = new JMenuItem("Save As");
-      	
+      clearscreen = new JMenuItem("Clear Screen");	
       
       file.add(open);
       file.add(save);
@@ -89,12 +89,15 @@ public class GUIFrame extends JFrame implements ActionListener, MenuListener {
       edit.add(sel);
       edit.add(move);
       edit.add(delete);
+      edit.add(clearscreen);
       move.addActionListener(this);
       move.setActionCommand("move");
       sel.addActionListener(this);
       sel.setActionCommand("sel");
       delete.addActionListener(this);
       delete.setActionCommand("delete");
+      clearscreen.addActionListener(this);
+      clearscreen.setActionCommand("clear");
       
       Menu.add(file);
       Menu.add(create);
@@ -149,6 +152,15 @@ public class GUIFrame extends JFrame implements ActionListener, MenuListener {
 	    	System.out.println("test");
 	    	draw.DrawDel(draw.selection);
 	    }
+	    if (cmd.equals("clear")){
+	    	System.out.println("Clear Screen");
+	    	Drawing.coords.clear();
+	    	draw.repaint();
+	    	//Drawing.DrawShapes(getGraphics());
+	    	//draw.DrawShapes(getGraphics());
+	    }
+	    
+	    
 	}		
 
 
