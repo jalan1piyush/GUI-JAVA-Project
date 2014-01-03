@@ -66,12 +66,24 @@ public class Drawing extends JPanel implements MouseListener, MouseMotionListene
 	}
 	
 	//Get Mode set GUIFrame MenuItem
+	/**
+	 * Method used to set value to the variable Mode. This variable determines the status of the Drawing canvas as to whether we are drawing or selecting etc. 
+	 * @param m
+	 */
 	public void set(String m){
 		Mode = m;
 		System.out.println("Mode:"+Mode);
 	}
 	
 	// Draw Items from coords ArrayList
+
+	
+	
+	/**
+	 * This method is used to call method for respective drawing classes depending upon the mode and the drawing type
+	 * @param g 
+	 */
+	
 	public void DrawShapes(Graphics g) {
 		paint(g);
 		Graphics2D shape = (Graphics2D) g;
@@ -91,6 +103,11 @@ public class Drawing extends JPanel implements MouseListener, MouseMotionListene
 	
 	// Draw Point as a filled Ellipse and 
 	// add it to coords ArrayList after mouse click
+	/**
+	 * Method used to draw a point 
+	 * @param x datatype: Double 
+	 * @param y
+	 */
 	public void DrawPoint(double x, double y){
 		//Graphics2D shape = (Graphics2D) g;
 		p1 = new Ellipse2D.Double(x-3, y-3, 6, 6);
@@ -252,6 +269,7 @@ public class Drawing extends JPanel implements MouseListener, MouseMotionListene
 		for (int c = 0; c<coord.size();c++){
 			coord.get(c).clear();
 		}
+		DrawShapes(getGraphics());
 	}
 		
 	
