@@ -27,7 +27,7 @@ public class GUIFrame extends JFrame implements ActionListener, MenuListener {
 		super("Interface Frame");
 		
 		draw = new Drawing();
-		draw.set(Mode);
+		draw.setm(Mode);
 		//addMouseListener((MouseListener) this);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		JMenuBar menu = Menu();
