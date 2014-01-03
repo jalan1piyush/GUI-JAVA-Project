@@ -120,15 +120,14 @@ public class GUIFrame extends JFrame implements ActionListener, MenuListener {
 	   }
 			
 	
-	public void actionPerformed(ActionEvent e) {
+public void actionPerformed(ActionEvent e) {
 		String cmd = e.getActionCommand();
 		if (cmd.equals("open")){
-			draw.set("open");
 			draw.Open();
 		}
 		if (cmd.equals("save")){
 			if(draw.sfile !=""){
-			draw.Save(false);
+				draw.Save(false);
 			} else {
 				draw.Save(true);
 			}
@@ -137,20 +136,44 @@ public class GUIFrame extends JFrame implements ActionListener, MenuListener {
 			draw.Save(false);
 		}
 	    if (cmd.equals("point")){
-	    	draw.set("point");
+	    	draw.setm("point");
 	    }
 	    if (cmd.equals("line")){
-	    	draw.set("line");
+	    	draw.setm("line");
 	    }
 	    if (cmd.equals("sel")){
-	    	draw.set("sel");
+	    	draw.setm("sel");
 	    }
 	    if (cmd.equals("move")){
-	    	draw.set("move");
+	    	draw.setm("move");
 	    }
 	    if (cmd.equals("delete")){
 	    	System.out.println("test");
 	    	draw.DrawDel(draw.selection);
+	    }
+	    if (cmd.equals("close")) {
+	    	dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+	    }
+	    if (cmd.equals("black")){
+	    	draw.Color = draw.black;
+	    }
+	    if (cmd.equals("purple")){
+	    	draw.Color = draw.purple;
+	    }
+	    if (cmd.equals("blue")){
+	    	draw.Color = draw.blue;
+	    }
+	    if (cmd.equals("green")){
+	    	draw.Color = draw.green;
+	    }
+	    if (cmd.equals("yellow")){
+	    	draw.Color = draw.yellow;
+	    }
+	    if (cmd.equals("orange")){
+	    	draw.Color = draw.orange;
+	    }
+	    if (cmd.equals("red")){
+	    	draw.Color = draw.red;
 	    }
 	    if (cmd.equals("clear")){
 	    	System.out.println("Clear Screen");
@@ -159,8 +182,6 @@ public class GUIFrame extends JFrame implements ActionListener, MenuListener {
 	    	//Drawing.DrawShapes(getGraphics());
 	    	//draw.DrawShapes(getGraphics());
 	    }
-	    
-	    
 	}		
 
 
