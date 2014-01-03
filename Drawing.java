@@ -29,7 +29,7 @@ public class Drawing extends JPanel implements MouseListener, MouseMotionListene
 	private Rectangle2D.Double r1;
 	private Cursor move, def, tar, hand;
 	private Shape shp, shpm;
-	private Color red, green, blue , black, orange, yellow, purple;
+	private Color red, green, blue , black, orange, yellow, purple, Color;
 	
 	// Create drawing surface and introduce Mouse Listeners 
 	// for motion and click events
@@ -56,6 +56,7 @@ public class Drawing extends JPanel implements MouseListener, MouseMotionListene
 		hand = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
 		move = Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR);
 		tar = Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR);
+		Color = new Color(0,0,0);
 		green = new Color(0,150,0);
 		blue = new Color(0,0,255);
 		purple = new Color(128,0,128);
@@ -87,6 +88,11 @@ public class Drawing extends JPanel implements MouseListener, MouseMotionListene
 	public void DrawShapes(Graphics g) {
 		paint(g);
 		Graphics2D shape = (Graphics2D) g;
+		RenderingHints hints = new RenderingHints(
+		    RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE
+		);
+		shape.setRenderingHints(hints);
+		shape.setColor(Color);
 		for (int i = 0; i < coords.size(); i++){
 			// Interruption to not draw items being moved
 			if (Mode == "move" && selection.size()>0 && selection.contains(i)){ }
@@ -98,8 +104,8 @@ public class Drawing extends JPanel implements MouseListener, MouseMotionListene
 				}
 			}
 		}
-		
-}
+		shape.dispose();
+	}
 	
 	// Draw Point as a filled Ellipse and 
 	// add it to coords ArrayList after mouse click
@@ -108,6 +114,7 @@ public class Drawing extends JPanel implements MouseListener, MouseMotionListene
 	 * @param x datatype: Double 
 	 * @param y
 	 */
+	 
 	public void DrawPoint(double x, double y){
 		//Graphics2D shape = (Graphics2D) g;
 		p1 = new Ellipse2D.Double(x-3, y-3, 6, 6);
