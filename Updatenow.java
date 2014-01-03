@@ -15,7 +15,7 @@ public class Updatenow {
 
 //Save details to MySQL Database and then to CSV
 	/**
-	 * Class created to save details like coordinates, geometry type and index to first database and then export it to CSV
+	 * Method created to save details like coordinates, geometry type and index to first database and then export it to CSV
 	 * @param x
 	 * @param sfile
 	 * 
@@ -49,7 +49,7 @@ public class Updatenow {
 
 //Open file to MySQL Database and then to CSV
 	/**
-	 * Class created to enter details like coordinates, geometry type and index from selected CSV to first database and then display it on screen
+	 * Method created to enter details like coordinates, geometry type and index from selected CSV to first database and then display it on screen
 	 * @param ofile
 	 */
 	public static void Open (String ofile) {
