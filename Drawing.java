@@ -136,6 +136,12 @@ public class Drawing extends JPanel implements MouseListener, MouseMotionListene
 	public void DrawSel(Graphics g, ArrayList<Integer> sel){
 		Graphics2D shape = (Graphics2D) g;
 		shape.setColor(red);
+		RenderingHints hint = new RenderingHints(
+			    RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE
+			);
+		RenderingHints antia =  new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		shape.setRenderingHints(hint);
+		shape.setRenderingHints(antia);
 		// Differentiation between points to draw
 		for (int i = 0; i<sel.size(); i++)
 			if (coords.get(sel.get(i)).getClass().equals(Ellipse2D.Double.class)) {
@@ -148,6 +154,7 @@ public class Drawing extends JPanel implements MouseListener, MouseMotionListene
 	        shape.setStroke(new BasicStroke(5));
 	        shape.draw((Shape) coords.get(sel.get(i)));
 		}
+		shape.dispose();
 	}
 	
 	// Creation of visual Bounding Box
