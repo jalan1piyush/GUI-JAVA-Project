@@ -1,6 +1,8 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
 import java.sql.*;
+
 import javax.swing.*;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
@@ -18,16 +20,16 @@ public class GUIFrame extends JFrame implements ActionListener, MenuListener {
 	public static Statement statement;
 	public static Connection conn;
 	private JMenu file, create, edit;
-	private JMenuItem point, line, sel, move, delete, open, save, saveas, clearscreen;
+	private JMenuItem point, line, ellipse, sel, move, delete, open, save, saveas, clearscreen;
 
 	/**
-	 * constructor of class GUIFrame
+	 * constructor of the class GUIFrame
 	 */
 	public GUIFrame(){
 		super("Interface Frame");
 		
 		draw = new Drawing();
-		draw.setm(Mode);
+		draw.set(Mode);
 		//addMouseListener((MouseListener) this);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		JMenuBar menu = Menu();
@@ -38,7 +40,7 @@ public class GUIFrame extends JFrame implements ActionListener, MenuListener {
 	
 	
 	/**
-	 * A method that returns a menubar
+	 * Method that returns a menubar
 	 */
 	public JMenuBar Menu() {
 	  JMenuBar Menu = new JMenuBar();
@@ -53,6 +55,10 @@ public class GUIFrame extends JFrame implements ActionListener, MenuListener {
       line = new JMenuItem ("Line");
       	KeyStroke ctl = KeyStroke.getKeyStroke(KeyEvent.VK_L, InputEvent.CTRL_MASK);
     	line.setAccelerator(ctl);
+      ellipse = new JMenuItem ("Ellipse");
+       	KeyStroke cte = KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.CTRL_MASK);
+       	ellipse.setAccelerator(cte);
+    	
       sel = new JMenuItem ("Select");
       	KeyStroke cts = KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_MASK);
       	sel.setAccelerator(cts);
@@ -81,10 +87,13 @@ public class GUIFrame extends JFrame implements ActionListener, MenuListener {
       
       create.add(point);
       create.add(line);
+      create.add(ellipse);
       point.addActionListener(this);
       point.setActionCommand("point");
       line.addActionListener(this);
       line.setActionCommand("line");
+      ellipse.addActionListener(this);
+      ellipse.setActionCommand("ellipse");
        
       edit.add(sel);
       edit.add(move);
@@ -106,74 +115,79 @@ public class GUIFrame extends JFrame implements ActionListener, MenuListener {
       return Menu;
 	}
 	
-	  public void menuSelected(MenuEvent e) {
+	  /* (non-Javadoc)
+	 * @see javax.swing.event.MenuListener#menuSelected(javax.swing.event.MenuEvent)
+	 */
+	public void menuSelected(MenuEvent e) {
 	      JMenu file = (JMenu) e.getSource();
 	      System.out.println("Menu Selected: "+file.getText());
 	   }
-	   public void menuDeselected(MenuEvent e) {
+	   /* (non-Javadoc)
+	 * @see javax.swing.event.MenuListener#menuDeselected(javax.swing.event.MenuEvent)
+	 */
+	public void menuDeselected(MenuEvent e) {
 		   JMenu file = (JMenu) e.getSource();
 		   System.out.println("Menu Selected: "+file.getText());
 	   }
-	   public void menuCanceled(MenuEvent e) {
+	   /* (non-Javadoc)
+	 * @see javax.swing.event.MenuListener#menuCanceled(javax.swing.event.MenuEvent)
+	 */
+	public void menuCanceled(MenuEvent e) {
 		   JMenu file = (JMenu) e.getSource();
 		   System.out.println("Menu Selected: "+file.getText());  
 	   }
 			
 	
-public void actionPerformed(ActionEvent e) {
+	/* (non-Javadoc)
+	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */
+	public void actionPerformed(ActionEvent e) {
 		String cmd = e.getActionCommand();
 		if (cmd.equals("open")){
+			draw.set("open");
 			draw.Open();
 		}
 		if (cmd.equals("save")){
-			if(draw.sfile !=""){
+			if(draw.ofile==null && draw.sfile==null){
+				System.out.println("not open and not previously saved");
 				draw.Save(false);
-			} else {
+			} 
+			else if (draw.sfile!=null) {
+				System.out.println("previously saved");
+				File opFile = new File(draw.sfile.concat(".csv"));		
+				opFile.delete();
+				draw.Save(true);		
+				
+			}
+			else if (draw.ofile!=null && draw.sfile==null) {
+				System.out.println("Old out.csv file exists. Removing...");
+				File opFile = new File(draw.ofile);				
+				opFile.delete();
 				draw.Save(true);
+				
 			}
 		}
 		if (cmd.equals("saveas")){
 			draw.Save(false);
 		}
 	    if (cmd.equals("point")){
-	    	draw.setm("point");
+	    	draw.set("point");
 	    }
 	    if (cmd.equals("line")){
-	    	draw.setm("line");
+	    	draw.set("line");
+	    }
+	    if (cmd.equals("ellipse")){
+	    	draw.set("ellipse");
 	    }
 	    if (cmd.equals("sel")){
-	    	draw.setm("sel");
+	    	draw.set("sel");
 	    }
 	    if (cmd.equals("move")){
-	    	draw.setm("move");
+	    	draw.set("move");
 	    }
 	    if (cmd.equals("delete")){
 	    	System.out.println("test");
 	    	draw.DrawDel(draw.selection);
-	    }
-	    if (cmd.equals("close")) {
-	    	dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
-	    }
-	    if (cmd.equals("black")){
-	    	draw.Color = draw.black;
-	    }
-	    if (cmd.equals("purple")){
-	    	draw.Color = draw.purple;
-	    }
-	    if (cmd.equals("blue")){
-	    	draw.Color = draw.blue;
-	    }
-	    if (cmd.equals("green")){
-	    	draw.Color = draw.green;
-	    }
-	    if (cmd.equals("yellow")){
-	    	draw.Color = draw.yellow;
-	    }
-	    if (cmd.equals("orange")){
-	    	draw.Color = draw.orange;
-	    }
-	    if (cmd.equals("red")){
-	    	draw.Color = draw.red;
 	    }
 	    if (cmd.equals("clear")){
 	    	System.out.println("Clear Screen");
@@ -182,9 +196,17 @@ public void actionPerformed(ActionEvent e) {
 	    	//Drawing.DrawShapes(getGraphics());
 	    	//draw.DrawShapes(getGraphics());
 	    }
+	    
+	    
 	}		
 
 
+	/**
+	 * main method for the program. It creates a GUI Frame, sets its size, location
+	 * The main method also first establishes a connection to the MySql, creates a database 'LANDP' if not existing, 
+	 * drops any previous table with the a particular name 'COORDINATES' and creates the table named COORDINATES
+	 * @param args
+	 */
 	public static void main (String[] args) {
 		 GUIFrame mainwindow = new GUIFrame();
 		 mainwindow.setSize(600,550); 
