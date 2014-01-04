@@ -16,8 +16,8 @@ public class Updatenow {
 //Save details to MySQL Database and then to CSV
 	/**
 	 * Method created to save details like coordinates, geometry type and index to first database and then export it to CSV
-	 * @param x
-	 * @param sfile
+	 * @param x: ArrayList, coord passed from Drawing Class
+	 * @param sfile : String, filename on which Save Method is to work
 	 * 
 	 */
 	public static void Save(ArrayList<ArrayList<Double>> x, String sfile) {
@@ -39,9 +39,23 @@ public class Updatenow {
                 out.setDouble(6, x.get(5).get(i));
 				out.execute();
 			}
-			String save = ("SELECT ID,LOP,STARTX,STARTY,ENDX,ENDY FROM LANDP.COORDINATES INTO OUTFILE '"+sfile+".csv' FIELDS TERMINATED BY ',' ENCLOSED BY '\"' LINES TERMINATED BY '\n'");
-			sql.executeQuery(save);	
 					
+			System.out.println("Before 'endswith' check condition and sfile=" + sfile);
+			if(!sfile.endsWith(".csv"))
+			{
+				System.out.println(" 'sFile' File name does not end with csv");
+				String save = ("SELECT ID,LOP,STARTX,STARTY,ENDX,ENDY FROM LANDP.COORDINATES INTO OUTFILE '"+sfile+".csv' FIELDS TERMINATED BY ',' ENCLOSED BY '\"' LINES TERMINATED BY '\n'");
+				sql.executeQuery(save);
+			}
+			else
+			{	
+				System.out.println(" 'sFile' File name ends with csv");
+				String save = ("SELECT ID,LOP,STARTX,STARTY,ENDX,ENDY FROM LANDP.COORDINATES INTO OUTFILE '"+sfile+"' FIELDS TERMINATED BY ',' ENCLOSED BY '\"' LINES TERMINATED BY '\n'");
+				sql.executeQuery(save);
+			}
+				
+		
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -50,7 +64,7 @@ public class Updatenow {
 //Open file to MySQL Database and then to CSV
 	/**
 	 * Method created to enter details like coordinates, geometry type and index from selected CSV to first database and then display it on screen
-	 * @param ofile
+	 * @param ofile, filename of the file from which the geometry is to be extracted 
 	 */
 	public static void Open (String ofile) {
 		ArrayList<ArrayList<Double>> In = new ArrayList<ArrayList<Double>>();
@@ -90,6 +104,10 @@ public class Updatenow {
 			else if(In.get(1).get(i)==1){
 				Line2D.Double l1 = new Line2D.Double(In.get(2).get(i), In.get(3).get(i), In.get(4).get(i), In.get(5).get(i));
                                 Drawing.coords.add(l1);
+			}
+			else if(In.get(1).get(i)==2){				
+				Ellipse2D.Double e1 = new Ellipse2D.Double(In.get(2).get(i), In.get(3).get(i), In.get(4).get(i), In.get(5).get(i));
+                                Drawing.coords.add(e1);
 			}
 		}
                 
